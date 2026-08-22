@@ -25,7 +25,7 @@ cd Termux
 Run Installer
 
 ```bash
-sh install.sh
+bash install.sh
 ```
 
 Back Home
@@ -37,5 +37,5 @@ cd
 Run Custom (termux.sh)
 
 ```bash
-sh termux.sh
+bash termux.sh
 ```
