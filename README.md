@@ -11,7 +11,7 @@ Termux Features:
 ## 📥 How to Install
 
 Clone
-
+    
 ```bash
 git clone https://github.com/Unknown-Desert/Termux.git
 ```
