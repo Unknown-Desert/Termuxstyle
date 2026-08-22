@@ -3,7 +3,7 @@
 Termux Features:
 - 🕵️ Fake Offline Layer
 - 🛡️ Safe DNS
-- 🚫 Blokir Iklan & Malware
+- 🚫 Block ADS & Malware
 - 🔒 Anti-DPI
 - 📊 Cool Info
 - 🔑 Password Profiles
@@ -19,7 +19,7 @@ git clone https://github.com/Unknown-Desert/Termux.git
 Open Folder
 
 ```bash
-cd termux-setup
+cd Termux
 ```
 
 Run Installer
