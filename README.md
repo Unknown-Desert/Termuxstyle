@@ -13,7 +13,7 @@ Termux Features:
 Clone
     
 ```bash
-git clone https://github.com/Unknown-Desert/Termux.git
+git clone https://github.com/Unknown-Desert/Termuxstyle.git
 ```
 
 Open Folder
