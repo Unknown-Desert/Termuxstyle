@@ -18,7 +18,7 @@ center() {
 type_text() {
   local text="$1"
   local width=$(tput cols)
-  local pad=$(( (width - ${#text}) / 2 ))
+  local pad=$(( (width - ${#text}) / 2 )) 
   if (( pad < 0 )); then pad=0; fi
   printf "%*s" $pad ""
   for ((i=0; i<${#text}; i++)); do
@@ -365,7 +365,7 @@ echo ""
 TODAY=$(date +"%A, %d %B %Y")
 center "${WHITE}     📆 $TODAY${NC}"
 echo ""
-center "${CYAN}        ⫸   مرحباً بكم في تيرمكس من LR   ⫷${NC}"
+center "${CYAN}        ⫸   مرحباً بكم في تيرمكس من Unknown-Desert   ⫷${NC}"
 echo ""
 sleep 0.2
 
@@ -561,4 +561,4 @@ if pgrep -f "gt" >/dev/null 2>&1; then
 fi
 echo ""
 
-export PS1="${GREEN}┌─[مجهول 💀 @LR]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
+export PS1="${GREEN}┌─[مجهول 💀 @User]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"

@@ -365,7 +365,7 @@ echo ""
 TODAY=$(date +"%A, %d %B %Y")
 center "${WHITE}     📆 $TODAY${NC}"
 echo ""
-center "${CYAN}        ⫸   SELAMAT DATANG DI TERMUX BY LR   ⫷${NC}"
+center "${CYAN}        ⫸   SELAMAT DATANG DI TERMUX BY Unknown-Desert   ⫷${NC}"
 echo ""
 sleep 0.2
 
@@ -554,4 +554,4 @@ if pgrep -f "gt" >/dev/null 2>&1; then
 fi
 echo ""
 
-export PS1="${GREEN}┌─[Anonymous 💀 @LR]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
+export PS1="${GREEN}┌─[Anonymous 💀 @User]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"

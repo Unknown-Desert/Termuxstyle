@@ -65,3 +65,6 @@ termux-backup.tar.gz
 
 .DS_Store
 desktop.ini
+
+/Readme.txt
+/.gitignore
