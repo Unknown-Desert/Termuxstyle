@@ -1,6 +1,6 @@
-# Termux Setup by Unknown-Desert
+# Termux Custom Setup by Unknown-Desert
 
-Custom Termux:
+Termux Features:
 - 🕵️ Fake Offline Layer
 - 🛡️ Safe DNS
 - 🚫 Blokir Iklan & Malware
