@@ -10,21 +10,31 @@ Termux Features:
 
 ## 📥 How to Install
 
+Clone
+
 ```bash
 git clone https://github.com/Unknown-Desert/Termux.git
 ```
+
+Open Folder
 
 ```bash
 cd termux-setup
 ```
 
+Run Installer
+
 ```bash
 sh install.sh
 ```
 
+Back Home
+
 ```bash
 cd
 ```
+
+Run Custom (termux.sh)
 
 ```bash
 sh termux.sh
