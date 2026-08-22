@@ -1,8 +1,7 @@
 #!/usr/bin/env bash
 
 # ============================================
-#  INSTALLER TERMUX BY LR
-#  with Language Selection
+#  INSTALLER TERMUX BY Unknown-Desert
 # ============================================
 
 set -e
@@ -17,10 +16,16 @@ CYAN=$'\033[1;36m'
 NC=$'\033[0m'
 
 echo "=============================================="
-echo "  📦 INSTALLER TERMUX BY LR"
+echo "  📦 INSTALLER TERMUX BY Unknown-Desert"
 echo "=============================================="
 echo ""
 
+if [[ -z "$BASH_VERSION" ]]; then
+    echo -e "${RED}❌ Run with bash${NC}"
+    exit 1
+fi
+
+# ===== Pilihan Bahasa =====
 if [[ -n "$1" ]]; then
     LANG_INPUT="$1"
 else
@@ -46,7 +51,7 @@ case "$LANG_INPUT" in
         LANG_NAME="العربية"
         ;;
     *)
-        echo -e "${YELLOW}[!] Pilihan tidak dikenal, menggunakan Bahasa Indonesia.${NC}"
+        echo -e "${YELLOW}[!] Choice Fail, Default: Bahasa Indonesia.${NC}"
         LANG_CODE="id"
         LANG_NAME="Bahasa Indonesia"
         ;;
@@ -57,40 +62,59 @@ TARGET_FILE="$HOME_TERMUX/termux.sh"
 
 echo ""
 echo -e "${CYAN}[i] Bahasa dipilih : ${LANG_NAME}${NC}"
-echo -e "${CYAN}[i] File sumber     : ${SOURCE_FILE}${NC}"
-echo -e "${CYAN}[i] File tujuan     : ${TARGET_FILE}${NC}"
 echo ""
 
-echo "📦 Install dependencies..."
-pkg update -y
-pkg install -y figlet lolcat cloudflared unbound python nodejs-lts
+echo "📦 Update paket..."
+pkg update -y || {
+    echo -e "${RED}❌ Fail update packages.${NC}"
+    exit 1
+}
 
-if command -v npm >/dev/null 2>&1; then
-    echo ""
-    echo "📦 Install GreenTunnel..."
-    npm install -g green-tunnel
+echo ""
+echo "📦 Install dependencies..."
+pkg install -y figlet cloudflared unbound python nodejs-lts ruby || {
+    echo -e "${RED}❌ Fail install Basic Packages.${NC}"
+    exit 1
+}
+
+echo ""
+echo "📦 Install lolcat via gem..."
+if command -v gem >/dev/null 2>&1; then
+    gem install lolcat || {
+        echo -e "${YELLOW}⚠️ Fail Installing lolcat, Skip.${NC}"
+    }
 else
-    echo "⚠️ npm not found. GreenTunnel not installed."
+    echo -e "${YELLOW}⚠️ gem not found, lolcat has not Installed.${NC}"
 fi
 
-pkg clean
+echo ""
+if command -v npm >/dev/null 2>&1; then
+    echo "📦 Install GreenTunnel..."
+    npm install -g green-tunnel || {
+        echo -e "${YELLOW}⚠️ Fail Installing GreenTunnel, Skip.${NC}"
+    }
+else
+    echo -e "${YELLOW}⚠️ npm not found, GreenTunnel has not Installed.${NC}"
+fi
 
 echo ""
+echo "🧹 Clear cache..."
+pkg clean || true
 
+echo ""
 if [[ -f "$SOURCE_FILE" ]]; then
     if [[ -f "$TARGET_FILE" ]]; then
         BACKUP_FILE="${TARGET_FILE}.backup_$(date +%Y%m%d_%H%M%S)"
         mv "$TARGET_FILE" "$BACKUP_FILE"
-        echo -e "${YELLOW}[i] Backup termux.sh lama: ${BACKUP_FILE}${NC}"
+        echo -e "${YELLOW}[i] Backup Old Termux: ${BACKUP_FILE}${NC}"
     fi
 
     cp -f "$SOURCE_FILE" "$TARGET_FILE"
     chmod +x "$TARGET_FILE"
-    echo -e "${GREEN}✅ termux.sh berhasil dipasang di: ${TARGET_FILE}${NC}"
-    echo -e "${GREEN}   Bahasa: ${LANG_NAME}${NC}"
-    echo -e "${GREEN}   Jalankan dengan: ./termux.sh${NC}"
+    echo -e "${GREEN}✅ termux.sh Saved in: ${TARGET_FILE}${NC}"
+    echo -e "${GREEN}   Language: ${LANG_NAME}${NC}"
 else
-    echo -e "${RED}❌ File bahasa tidak ditemukan: ${SOURCE_FILE}${NC}"
-    echo "   Pastikan file lang_id.sh / lang_en.sh / lang_ar.sh berada di folder yang sama dengan install.sh"
+    echo -e "${RED}❌ Files Not Found: ${SOURCE_FILE}${NC}"
+    echo "   Make sure the files lang_id.sh / lang_en.sh / lang_ar.sh in this folder"
     exit 1
 fi
