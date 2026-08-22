@@ -67,4 +67,6 @@ termux-backup.tar.gz
 desktop.ini
 
 /Readme.txt
-/.gitignore
+.gitignore
+.git/
+.gitmodules
