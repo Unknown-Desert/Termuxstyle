@@ -582,6 +582,7 @@ if [[ -z "$MAC_ADDR" ]]; then
 fi
 MAC_ADDR=${MAC_ADDR:-N/A}
 
+enable_fake_offline
 echo -e "${CYAN}OS        : $OS${NC}"
 echo -e "${CYAN}Host      : $HOST${NC}"
 echo -e "${CYAN}Kernel    : $KERNEL${NC}"
@@ -595,7 +596,6 @@ echo -e "${CYAN}Storage   : $STORAGE_INFO  <($PERCENTAGE)>${NC}"
 echo -e "${CYAN}Safe Net  : $SAFETY_STATUS${NC}"
 echo -e "${CYAN}Fake Off  : $FAKE_OFFLINE_STATUS${NC}"
 
-enable_fake_offline
 if pgrep -f "gt" >/dev/null 2>&1; then
   echo -e "${CYAN}Anti-DPI  : ${GREEN}Active (GreenTunnel)${NC}"
 fi
