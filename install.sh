@@ -48,8 +48,13 @@ if [[ -f "$HOME/.cache_profile" ]]; then
 fi
 
 if [[ -f "$HOME/.bashrc" ]]; then
-    cp "$HOME/.bashrc" "$HOME/.bashrc.backup_$(date +%Y%m%d_%H%M%S)"
-    echo -e "${YELLOW}[i] .bashrc backup created${NC}"
+    if [[ -f "$HOME/.bashrc.backup" ]]; then
+        rm -f "$HOME/.bashrc.backup"
+        echo -e "${YELLOW}[i] Removed old .bashrc.backup${NC}"
+    fi
+    
+    cp "$HOME/.bashrc" "$HOME/.bashrc.backup"
+    echo -e "${YELLOW}[i] .bashrc backup created (overwrites old backup)${NC}"
     
     sed -i '/source ~\/termux.sh/d' "$HOME/.bashrc"
     sed -i '/# Termux customization by Unknown-Desert/d' "$HOME/.bashrc"
