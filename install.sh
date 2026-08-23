@@ -175,16 +175,42 @@ if [[ -f "$HOME/.cache_profile" ]]; then
 fi
 
 echo ""
-if [[ -f "$SOURCE_FILE" ]]; then
-    cp -f "$SOURCE_FILE" "$TARGET_FILE"
-    chmod +x "$TARGET_FILE"
-    echo -e "${GREEN}✅ termux.sh saved to: ${TARGET_FILE}${NC}"
-    echo -e "${GREEN}   Language: ${LANG_NAME}${NC}"
-else
-    echo -e "${RED}❌ File not found: ${SOURCE_FILE}${NC}"
-    echo "   Make sure lang_id.sh / lang_en.sh exist in this folder"
-    exit 1
-fi
+while true; do
+    if [[ -f "$SOURCE_FILE" ]]; then
+        cp -f "$SOURCE_FILE" "$TARGET_FILE"
+        chmod +x "$TARGET_FILE"
+        echo -e "${GREEN}✅ termux.sh saved to: ${TARGET_FILE}${NC}"
+        echo -e "${GREEN}   Language: ${LANG_NAME}${NC}"
+        break
+    else
+        echo -e "${RED}❌ File not found: ${SOURCE_FILE}${NC}"
+        echo "   Make sure lang_id.sh / lang_en.sh exist in this folder"
+        echo "   Please select language again."
+        echo ""
+        echo "🌐 Select Language"
+        echo "  1) Indonesia"
+        echo "  2) English"
+        echo -n "(1/2): "
+        read -r LANG_INPUT
+        
+        case "$LANG_INPUT" in
+            1|id|ID|indonesia|Indonesia|INDONESIA)
+                LANG_CODE="id"
+                LANG_NAME="Bahasa Indonesia"
+                ;;
+            2|en|EN|english|English|ENGLISH)
+                LANG_CODE="en"
+                LANG_NAME="English"
+                ;;
+            *)
+                echo -e "${YELLOW}[!] Invalid choice, defaulting to English.${NC}"
+                LANG_CODE="en"
+                LANG_NAME="English"
+                ;;
+        esac
+        SOURCE_FILE="$SCRIPT_DIR/lang_${LANG_CODE}.sh"
+    fi
+done
 
 if ! grep -q "LANG=en_US.UTF-8" "$HOME/.bashrc" 2>/dev/null; then
     echo "export LANG=en_US.UTF-8" >> "$HOME/.bashrc"
@@ -216,7 +242,6 @@ if [[ -f "$HOME/termux.sh" ]]; then
     if bash "$HOME/termux.sh"; then
         echo -e "${GREEN}✅ termux.sh ran successfully.${NC}"
 
-        # Sekarang tambahkan kustomisasi ke .bashrc hanya setelah sukses
         if ! grep -q "LANG=en_US.UTF-8" "$HOME/.bashrc" 2>/dev/null; then
             echo "export LANG=en_US.UTF-8" >> "$HOME/.bashrc"
         fi
@@ -244,6 +269,7 @@ if [[ -f "$HOME/termux.sh" ]]; then
         exit 1
     fi
 else
+    echo -e "${YELLOW}[i] termux.sh not found. Mencoba menyalin ulang...${NC}"
     echo -e "${RED}❌ termux.sh not found in $HOME${NC}"
     exit 1
 fi
