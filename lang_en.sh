@@ -604,3 +604,14 @@ echo ""
 USER_NAME=${USER_NAME:-User}
 export PS1="${GREEN}┌─[Anonymous 💀 @${USER_NAME}]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
 
+BASHRC="$HOME/.bashrc"
+if [ ! -f "$BASHRC" ]; then
+    touch "$BASHRC"
+fi
+
+if ! grep -q "source ~/termux.sh" "$BASHRC" 2>/dev/null; then
+    echo -e "${YELLOW}Adding source ~/termux.sh to .bashrc...${NC}"
+    echo "" >> "$BASHRC"
+    echo "# Termux customization by Unknown-Desert" >> "$BASHRC"
+    echo "source ~/termux.sh" >> "$BASHRC"
+fi

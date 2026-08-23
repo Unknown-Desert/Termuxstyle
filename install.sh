@@ -47,21 +47,57 @@ if [[ -f "$HOME/.cache_profile" ]]; then
     echo -e "${YELLOW}[i] Removed old .cache_profile${NC}"
 fi
 
-if [[ -f "$HOME/.bashrc" ]]; then
-    if [[ -f "$HOME/.bashrc.backup" ]]; then
-        rm -f "$HOME/.bashrc.backup"
-        echo -e "${YELLOW}[i] Removed old .bashrc.backup${NC}"
+BASHRC="$HOME/.bashrc"
+BASHRC_BACKUP="$HOME/.bashrc.backup"
+
+if [[ -f "$BASHRC" ]]; then
+    cp -f "$BASHRC" "$BASHRC_BACKUP"
+    echo -e "${YELLOW}[i] Backup .bashrc dibuat: $BASHRC_BACKUP${NC}"
+fi
+
+echo ""
+echo -e "${CYAN}[i] Starting termux.sh...${NC}"
+cd "$HOME" || {
+    echo -e "${RED}❌ Failed to change to home directory.${NC}"
+    exit 1
+}
+
+if [[ -f "$HOME/termux.sh" ]]; then
+    if bash "$HOME/termux.sh"; then
+        echo -e "${GREEN}✅ termux.sh berhasil dijalankan.${NC}"
+
+        if [ ! -f "$BASHRC" ]; then
+            touch "$BASHRC"
+        fi
+
+        if ! grep -q "source ~/termux.sh" "$BASHRC" 2>/dev/null; then
+            echo "" >> "$BASHRC"
+            echo "# Termux customization by Unknown-Desert" >> "$BASHRC"
+            echo "source ~/termux.sh" >> "$BASHRC"
+            echo -e "${GREEN}✅ Auto-load termux.sh ditambahkan ke .bashrc${NC}"
+        fi
+
+        if ! grep -q "export LANG=en_US.UTF-8" "$BASHRC" 2>/dev/null; then
+            echo "export LANG=en_US.UTF-8" >> "$BASHRC"
+        fi
+        if ! grep -q "export LC_ALL=en_US.UTF-8" "$BASHRC" 2>/dev/null; then
+            echo "export LC_ALL=en_US.UTF-8" >> "$BASHRC"
+        fi
+
+        echo -e "${GREEN}✅ Instalasi selesai.${NC}"
+    else
+        echo -e "${RED}❌ termux.sh gagal. Memulihkan .bashrc dari backup...${NC}"
+        if [[ -f "$BASHRC_BACKUP" ]]; then
+            cp -f "$BASHRC_BACKUP" "$BASHRC"
+            echo -e "${YELLOW}[i] .bashrc dipulihkan.${NC}"
+        else
+            echo -e "${YELLOW}[i] Tidak ada backup .bashrc, .bashrc dibiarkan apa adanya.${NC}"
+        fi
+        exit 1
     fi
-    
-    cp "$HOME/.bashrc" "$HOME/.bashrc.backup"
-    echo -e "${YELLOW}[i] .bashrc backup created (overwrites old backup)${NC}"
-    
-    sed -i '/source ~\/termux.sh/d' "$HOME/.bashrc"
-    sed -i '/# Termux customization by Unknown-Desert/d' "$HOME/.bashrc"
-    sed -i '/export LANG=en_US.UTF-8/d' "$HOME/.bashrc"
-    sed -i '/export LC_ALL=en_US.UTF-8/d' "$HOME/.bashrc"
-    
-    echo -e "${YELLOW}[i] .bashrc cleaned from old entries${NC}"
+else
+    echo -e "${RED}❌ termux.sh tidak ditemukan di $HOME${NC}"
+    exit 1
 fi
 
 echo -e "${GREEN}✅ Cleanup complete!${NC}"
