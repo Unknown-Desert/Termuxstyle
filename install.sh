@@ -176,7 +176,7 @@ cd "$HOME" || {
 }
 
 if [[ -f "$HOME/termux.sh" ]]; then
-    if bash "$HOME/termux.sh"; then
+    if source "$HOME/termux.sh"; then
         echo -e "${GREEN}✅ termux.sh ran successfully.${NC}"
 
         # Sekarang tambahkan kustomisasi ke .bashrc hanya setelah sukses

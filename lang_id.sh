@@ -596,6 +596,7 @@ echo -e "${CYAN}Storage   : $STORAGE_INFO  <($PERCENTAGE)>${NC}"
 echo -e "${CYAN}Safe Net  : $SAFETY_STATUS${NC}"
 echo -e "${CYAN}Fake Off  : $FAKE_OFFLINE_STATUS${NC}"
 
+enable_fake_offline
 if pgrep -f "gt" >/dev/null 2>&1; then
   echo -e "${CYAN}Anti-DPI  : ${GREEN}Aktif (GreenTunnel)${NC}"
 fi
