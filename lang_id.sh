@@ -114,6 +114,50 @@ disable_fake_offline() {
   DISABLED_ALIASES=()
 }
 
+export FAKE_OFFLINE_TEMP_DISABLED=false
+
+is_auto_off_command() {
+    local cmd="$1"
+    cmd="${cmd#"${cmd%%[![:space:]]*}"}" 
+    local first_word="${cmd%%[[:space:]]*}"
+    if [[ "$first_word" == ./* || "$first_word" == /* ]]; then
+        return 0
+    fi
+
+    case "$first_word" in
+        python|python2|python3|node|nodejs|ruby|perl|php|lua|deno|bun| \
+        pip|pip3|gem|npm|yarn|pkg|apt|apt-get|dpkg)
+            return 0 ;;
+        bash|sh|zsh|fish|dash|ksh|source)
+            local rest="${cmd#*[[:space:]]}"
+            [[ -n "$rest" ]] && return 0 || return 1 ;;
+        *)
+            return 1 ;;
+    esac
+}
+
+auto_off_preexec() {
+    local cmd="$BASH_COMMAND"
+    [[ "$cmd" == auto_off_preexec* || "$cmd" == auto_off_prompt* || "$cmd" == PROMPT_COMMAND* ]] && return
+
+    [[ "$FAKE_OFFLINE_ACTIVE" != "true" || "$FAKE_OFFLINE_TEMP_DISABLED" == "true" ]] && return
+
+    if is_auto_off_command "$cmd"; then
+        echo -e "\n🔓 Fake Offline dimatikan sementara untuk perintah: $cmd"
+        disable_fake_offline
+        export FAKE_OFFLINE_TEMP_DISABLED=true
+    fi
+}
+trap auto_off_preexec DEBUG
+
+auto_off_prompt() {
+    if [[ "$FAKE_OFFLINE_TEMP_DISABLED" == "true" ]]; then
+        enable_fake_offline
+        export FAKE_OFFLINE_TEMP_DISABLED=false
+        echo "🔒 Fake Offline diaktifkan kembali."
+    fi
+}
+
 fakeoff() {
   if [ "$FAKE_OFFLINE_ACTIVE" != "true" ]; then
     echo "ℹ️ Fake Offline tidak aktif."
@@ -283,7 +327,7 @@ detect_fake_proxy_use() {
   done
 }
 
-export PROMPT_COMMAND="detect_fake_proxy_use"
+export PROMPT_COMMAND="auto_off_prompt; detect_fake_proxy_use"
 
 PROFILE_FILE="$HOME/.cache_profile"
 
@@ -559,3 +603,4 @@ echo ""
 
 USER_NAME=${USER_NAME:-User}
 export PS1="${GREEN}┌─[Anonymous 💀 @${USER_NAME}]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
+

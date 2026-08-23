@@ -170,14 +170,42 @@ fi
 
 echo ""
 echo -e "${CYAN}[i] Starting termux.sh...${NC}"
-
 cd "$HOME" || {
     echo -e "${RED}❌ Failed to change to home directory.${NC}"
     exit 1
 }
 
 if [[ -f "$HOME/termux.sh" ]]; then
-    bash "$HOME/termux.sh"
+    if bash "$HOME/termux.sh"; then
+        echo -e "${GREEN}✅ termux.sh ran successfully.${NC}"
+
+        # Sekarang tambahkan kustomisasi ke .bashrc hanya setelah sukses
+        if ! grep -q "LANG=en_US.UTF-8" "$HOME/.bashrc" 2>/dev/null; then
+            echo "export LANG=en_US.UTF-8" >> "$HOME/.bashrc"
+        fi
+        if ! grep -q "LC_ALL=en_US.UTF-8" "$HOME/.bashrc" 2>/dev/null; then
+            echo "export LC_ALL=en_US.UTF-8" >> "$HOME/.bashrc"
+        fi
+
+        BASHRC="$HOME/.bashrc"
+        [ ! -f "$BASHRC" ] && touch "$BASHRC"
+
+        if ! grep -q "source ~/termux.sh" "$BASHRC" 2>/dev/null; then
+            echo "" >> "$BASHRC"
+            echo "# Termux customization by Unknown-Desert" >> "$BASHRC"
+            echo "source ~/termux.sh" >> "$BASHRC"
+            echo -e "${GREEN}✅ Auto-load termux.sh added to .bashrc${NC}"
+        fi
+    else
+        echo -e "${RED}❌ termux.sh failed. Restoring .bashrc from backup...${NC}"
+        if [[ -f "$HOME/.bashrc.backup" ]]; then
+            cp -f "$HOME/.bashrc.backup" "$HOME/.bashrc"
+            echo -e "${YELLOW}[i] .bashrc restored from backup.${NC}"
+        else
+            echo -e "${YELLOW}[i] No backup .bashrc found, leaving current .bashrc.${NC}"
+        fi
+        exit 1
+    fi
 else
     echo -e "${RED}❌ termux.sh not found in $HOME${NC}"
     exit 1
