@@ -2,17 +2,12 @@
 
 # ============================================
 #  TERMUX - KONFIGURASI BAHASA ARAB (TRADISIONAL)
-#  TERMUX - تكوين اللغة العربية (الفصحى)
 #  BY Unknown-Desert
 # ============================================
 
 export LANG=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-# ============================================
-#  CEK FONT ARAB
-#  التحقق من وجود خط عربي
-# ============================================
 if [[ ! -f "$HOME/.termux/font.ttf" ]]; then
     echo -e "\033[1;33m⚠️  Font Arab tidak terdeteksi! / لم يتم اكتشاف خط عربي!\"\033[0m"
     echo -e "\033[1;33m   Solusi: jalankan install.sh dan pilih bahasa Arab.\033[0m"
@@ -21,9 +16,6 @@ if [[ ! -f "$HOME/.termux/font.ttf" ]]; then
     sleep 3
 fi
 
-# ============================================
-#  WARNA / الألوان
-# ============================================
 RED=$'\033[1;31m'
 WHITE=$'\033[1;37m'
 CYAN=$'\033[1;36m'
@@ -31,9 +23,6 @@ GREEN=$'\033[1;32m'
 YELLOW=$'\033[1;33m'
 NC=$'\033[0m'
 
-# ============================================
-#  FUNGSI BANTUAN / دوال مساعدة
-# ============================================
 center() {
   local text="$1"
   local width=$(tput cols)
@@ -55,9 +44,6 @@ type_text() {
   echo ""
 }
 
-# ============================================
-#  FAKE OFFLINE - ALIAS PALSU / أوامر مزيّفة
-# ============================================
 FAKE_ALIASES=(ping curl wget git npm apt nc ssh ping6 ftp scp proxy)
 
 set_fake_proxy() {
@@ -73,7 +59,6 @@ export FAKE_OFFLINE_ACTIVE=true
 export FAKE_OFFLINE_REMIND_SHOWN=false
 export FAKE_OFFLINE_STATUS="ON"
 
-# Definisikan alias palsu dengan pesan Arab
 ping()   { echo "ping: مضيف غير معروف / unknown host"; fakeoffcheck "ping"; }
 curl()   { echo "curl: انتهت مهلة الشبكة / network timeout"; fakeoffcheck "curl"; }
 wget()   { echo "wget: فشل: لا يوجد مسار إلى المضيف / failed: No route to host"; fakeoffcheck "wget"; }
@@ -145,10 +130,6 @@ disable_fake_offline() {
   DISABLED_ALIASES=()
 }
 
-# ============================================
-#  INTERAKSI DENGAN PENGGUNA (DUAL BAHASA)
-#  التفاعل مع المستخدم (لغتان)
-# ============================================
 fakeoff() {
   if [ "$FAKE_OFFLINE_ACTIVE" != "true" ]; then
     echo "ℹ️  Fake Offline tidak aktif / الإنترنت الوهمي غير نشط."
@@ -320,23 +301,25 @@ detect_fake_proxy_use() {
 
 export PROMPT_COMMAND="detect_fake_proxy_use"
 
-# ============================================
-#  PROFIL PENGGUNA (PASSWORD)
-#  الملف الشخصي (كلمات المرور)
-# ============================================
 PROFILE_FILE="$HOME/.cache_profile"
 
 if [ ! -f "$PROFILE_FILE" ]; then
-    echo "🛠️  Pengaturan pertama kali / الإعداد لأول مرة..."
+    echo "🛠️  الإعداد لأول مرة..."
     echo ""
 
-    read -p "Gunakan figlet untuk banner? (y/n, default n) / استخدام figlet للشعار؟: " USE_FIGLET
+    read -p "استخدام figlet للشعار؟ (y/n، الافتراضي n): " USE_FIGLET
     case "$USE_FIGLET" in
         y|Y|yes|YES) USE_FIGLET="true" ;;
         *) USE_FIGLET="false" ;;
     esac
 
-    echo "Password (kosongkan untuk default kosong) / كلمة المرور (اتركها فارغة للافتراضي الفارغ):"
+    read -p "أدخل اسم الشعار لـ figlet (الافتراضي Unknown): " FIGLET_TEXT
+    FIGLET_TEXT=${FIGLET_TEXT:-Unknown}
+
+    read -p "أدخل اسم المستخدم لـ @User (الافتراضي User): " USER_NAME
+    USER_NAME=${USER_NAME:-User}
+
+    echo "كلمة المرور (اتركها فارغة للافتراضي الفارغ):"
     read -s PASS1
     echo ""
     read -s PASS2
@@ -344,27 +327,25 @@ if [ ! -f "$PROFILE_FILE" ]; then
     read -s PASS3
     echo ""
 
-    read -p "Hint password (opsional) / تلميح كلمة المرور (اختياري): " HINT_PASSWORD
+    read -p "تلميح كلمة المرور (اختياري): " HINT_PASSWORD
 
     cat > "$PROFILE_FILE" <<EOF
-# Profil pengguna / الملف الشخصي – dibuat otomatis
+# الملف الشخصي – تم إنشاؤه تلقائياً
 USE_FIGLET="$USE_FIGLET"
 PASSWORD1="$PASS1"
 PASSWORD2="$PASS2"
 PASSWORD3="$PASS3"
 HINT_PASSWORD="$HINT_PASSWORD"
+FIGLET_TEXT="$FIGLET_TEXT"
+USER_NAME="$USER_NAME"
 EOF
 
-    echo "✅ Profil disimpan di / تم حفظ الملف الشخصي في $PROFILE_FILE"
+    echo "✅ تم حفظ الملف الشخصي في $PROFILE_FILE"
     echo ""
 fi
 
 source "$PROFILE_FILE"
 
-# ============================================
-#  AUTHENTIKASI 3 PASSWORD
-#  المصادقة بثلاث كلمات مرور
-# ============================================
 clear
 
 center "${YELLOW}       Masukkan 3 Password (Tersembunyi) / أدخل ٣ كلمات مرور (غير مرئية)${NC}"
@@ -388,23 +369,23 @@ read -s USER3 && tput cuu1 && tput el && echo ""
 
 clear
 
-# ============================================
-#  BANNER / الشعار
-# ============================================
+FIGLET_TEXT=${FIGLET_TEXT:-Unknown}
+
 if [ "$USE_FIGLET" = "true" ]; then
   if command -v figlet >/dev/null 2>&1; then
     if command -v lolcat >/dev/null 2>&1 && echo "test" | lolcat >/dev/null 2>&1; then
-      figlet -f slant "مجهول" | while IFS= read -r line; do center "$line"; done | lolcat
+      figlet -f slant "$FIGLET_TEXT" | while IFS= read -r line; do center "$line"; done | lolcat
     else
-      figlet -f slant "مجهول" | while IFS= read -r line; do center "$line"; done
+      figlet -f slant "$FIGLET_TEXT" | while IFS= read -r line; do center "$line"; done
     fi
   else
-    echo -e "${RED}❌ Figlet tidak ditemukan / لم يتم العثور على figlet.${NC}"
-    center "${CYAN}مجهول${NC}"
+    echo -e "${RED}❌ لم يتم العثور على figlet.${NC}"
+    center "${CYAN}$FIGLET_TEXT${NC}"
   fi
 else
-  center "${CYAN}مجهول${NC}"
+  center "${CYAN}$FIGLET_TEXT${NC}"
 fi
+
 echo ""
 
 TODAY=$(date +"%A، %d %B %Y")
@@ -414,9 +395,6 @@ center "${CYAN}        ⫸   SELAMAT DATANG / مرحباً بكم في TERMUX BY
 echo ""
 sleep 0.2
 
-# ============================================
-#  MOTIVASI / تحفيز
-# ============================================
 MOTIVASI_LIST=(
   "لا تستسلم أبداً / Pantang Menyerah"
   "الفشل هو معلم النجاح / Gagal itu Guru"
@@ -434,9 +412,6 @@ center "${WHITE} 🥶 MOTIVASI / تحفيز"
 center "${WHITE}              ${CYAN}${RANDOM_MOTIVASI}${NC}"
 echo ""
 
-# ============================================
-#  DNS TERENKRIPSI / DNS مشفّر
-# ============================================
 DNS_FILE="$PREFIX/etc/resolv.conf"
 IS_SAFE=false
 
@@ -501,9 +476,6 @@ else
   fi
 fi
 
-# ============================================
-#  BLOKIR DOMAIN / حظر النطاقات
-# ============================================
 BLOCK_FILE="$PREFIX/etc/hosts"
 BLOCK_TAG="# === Custom BlockList Start ==="
 BLOCK_END="# === Custom BlockList End ==="
@@ -530,9 +502,6 @@ fi
 
 echo -e "${GREEN}[✓] Blokir domain iklan/malware diterapkan / تم تطبيق حظر الإعلانات والبرمجيات الخبيثة.${NC}"
 
-# ============================================
-#  GREEN TUNNEL (ANTI-DPI)
-# ============================================
 SAFETY_STATUS="${RED}False${NC}"
 [ "$IS_SAFE" = true ] && SAFETY_STATUS="${GREEN}True${NC}"
 
@@ -545,9 +514,6 @@ if command -v gt >/dev/null 2>&1; then
   echo -e "${GREEN}[✓] GreenTunnel berjalan di port 8000 / يعمل على المنفذ 8000.${NC}"
 fi
 
-# ============================================
-#  INFORMASI SISTEM / معلومات النظام
-# ============================================
 OS=$(uname -o)
 HOST="$(getprop ro.product.manufacturer 2>/dev/null) $(getprop ro.product.model 2>/dev/null)"
 KERNEL=$(uname -r)
@@ -606,7 +572,17 @@ if pgrep -f "gt" >/dev/null 2>&1; then
 fi
 echo ""
 
-# ============================================
-#  PROMPT / موجه الأوامر
-# ============================================
-export PS1="${GREEN}┌─[مجهول 💀 @User]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
+USER_NAME=${USER_NAME:-User}
+export PS1="${GREEN}┌─[Anonymous 💀 @${USER_NAME}]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
+
+BASHRC="$HOME/.bashrc"
+if [ ! -f "$BASHRC" ]; then
+    touch "$BASHRC"
+fi
+
+if ! grep -q "source ~/termux.sh" "$BASHRC" 2>/dev/null; then
+    echo -e "${YELLOW}جاري إضافة source ~/termux.sh إلى .bashrc للتشغيل التلقائي...${NC}"
+    echo "" >> "$BASHRC"
+    echo "# Termux customization by Unknown-Desert" >> "$BASHRC"
+    echo "source ~/termux.sh" >> "$BASHRC"
+fi

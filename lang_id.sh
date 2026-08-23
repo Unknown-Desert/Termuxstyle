@@ -291,12 +291,17 @@ if [ ! -f "$PROFILE_FILE" ]; then
     echo "🛠️  Pengaturan pertama kali..."
     echo ""
 
-    # --- Figlet ---
     read -p "Gunakan figlet untuk banner? (y/n, default n): " USE_FIGLET
     case "$USE_FIGLET" in
         y|Y|yes|YES) USE_FIGLET="true" ;;
         *) USE_FIGLET="false" ;;
     esac
+
+    read -p "Masukkan nama untuk banner figlet (default Unknown): " FIGLET_TEXT
+    FIGLET_TEXT=${FIGLET_TEXT:-Unknown}
+
+    read -p "Masukkan nama user untuk prompt @User (default User): " USER_NAME
+    USER_NAME=${USER_NAME:-User}
 
     echo "Password (kosongkan untuk default kosong):"
     read -s PASS1
@@ -315,6 +320,8 @@ PASSWORD1="$PASS1"
 PASSWORD2="$PASS2"
 PASSWORD3="$PASS3"
 HINT_PASSWORD="$HINT_PASSWORD"
+FIGLET_TEXT="$FIGLET_TEXT"
+USER_NAME="$USER_NAME"
 EOF
 
     echo "✅ Profil disimpan di $PROFILE_FILE"
@@ -346,20 +353,23 @@ read -s USER3 && tput cuu1 && tput el && echo ""
 
 clear
 
+FIGLET_TEXT=${FIGLET_TEXT:-Unknown}
+
 if [ "$USE_FIGLET" = "true" ]; then
   if command -v figlet >/dev/null 2>&1; then
     if command -v lolcat >/dev/null 2>&1 && echo "test" | lolcat >/dev/null 2>&1; then
-      figlet -f slant "Unknown" | while IFS= read -r line; do center "$line"; done | lolcat
+      figlet -f slant "$FIGLET_TEXT" | while IFS= read -r line; do center "$line"; done | lolcat
     else
-      figlet -f slant "Unknown" | while IFS= read -r line; do center "$line"; done
+      figlet -f slant "$FIGLET_TEXT" | while IFS= read -r line; do center "$line"; done
     fi
   else
     echo -e "${RED}❌ Figlet tidak ditemukan.${NC}"
-    center "${CYAN}UNKNOWN${NC}"
+    center "${CYAN}$FIGLET_TEXT${NC}"
   fi
 else
-  center "${CYAN}UNKNOWN${NC}"
+  center "${CYAN}$FIGLET_TEXT${NC}"
 fi
+
 echo ""
 
 TODAY=$(date +"%A, %d %B %Y")
@@ -554,4 +564,17 @@ if pgrep -f "gt" >/dev/null 2>&1; then
 fi
 echo ""
 
-export PS1="${GREEN}┌─[Anonymous 💀 @User]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
+USER_NAME=${USER_NAME:-User}
+export PS1="${GREEN}┌─[Anonymous 💀 @${USER_NAME}]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
+
+BASHRC="$HOME/.bashrc"
+if [ ! -f "$BASHRC" ]; then
+    touch "$BASHRC"
+fi
+
+if ! grep -q "source ~/termux.sh" "$BASHRC" 2>/dev/null; then
+    echo -e "${YELLOW}Menambahkan source ~/termux.sh ke .bashrc agar otomatis berjalan...${NC}"
+    echo "" >> "$BASHRC"
+    echo "# Termux customization by Unknown-Desert" >> "$BASHRC"
+    echo "source ~/termux.sh" >> "$BASHRC"
+fi

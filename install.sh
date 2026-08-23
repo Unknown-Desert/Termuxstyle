@@ -118,3 +118,60 @@ else
     echo "   Make sure the files lang_id.sh / lang_en.sh / lang_ar.sh in this folder"
     exit 1
 fi
+
+# ============================================
+#  DUKUNGAN BAHASA ARAB (TRADISIONAL)
+# ============================================
+if [[ "$LANG_CODE" == "ar" ]]; then
+    echo ""
+    echo -e "${CYAN}[i] Mengatur dukungan penuh untuk Bahasa Arab Tradisional...${NC}"
+    echo -e "${CYAN}[i] جاري تهيئة الدعم الكامل للغة العربية الفصحى...${NC}"
+
+    # Pastikan unzip terinstal
+    pkg install -y unzip
+
+    # Buat folder font Termux
+    mkdir -p "$HOME/.termux"
+
+    # Unduh Noto Sans Arabic (prioritas)
+    echo -e "${CYAN}[i] Mengunduh font Noto Sans Arabic...${NC}"
+    echo -e "${CYAN}[i] جاري تحميل خط Noto Sans Arabic...${NC}"
+    curl -L -o /tmp/NotoSansArabic.ttf \
+        "https://github.com/googlefonts/noto-fonts/raw/main/hinted/ttf/NotoSansArabic/NotoSansArabic-Regular.ttf"
+
+    if [[ -f /tmp/NotoSansArabic.ttf ]]; then
+        mv /tmp/NotoSansArabic.ttf "$HOME/.termux/font.ttf"
+        echo -e "${GREEN}✅ Font Noto Sans Arabic berhasil dipasang!${NC}"
+        echo -e "${GREEN}✅ تم تثبيت خط Noto Sans Arabic بنجاح!${NC}"
+    else
+        # Fallback ke GNU FreeFont
+        echo -e "${YELLOW}⚠️ Gagal download Noto Sans Arabic, fallback ke GNU FreeFont...${NC}"
+        echo -e "${YELLOW}⚠️ فشل تحميل Noto Sans Arabic، جاري استخدام GNU FreeFont...${NC}"
+        curl -L -o /tmp/freefont.zip \
+            "https://ftp.gnu.org/gnu/freefont/freefont-ttf-20120503.zip"
+        if [[ -f /tmp/freefont.zip ]]; then
+            unzip -p /tmp/freefont.zip FreeMono.ttf > "$HOME/.termux/font.ttf"
+            rm -f /tmp/freefont.zip
+            echo -e "${GREEN}✅ Font GNU FreeFont berhasil dipasang!${NC}"
+            echo -e "${GREEN}✅ تم تثبيت خط GNU FreeFont بنجاح!${NC}"
+        else
+            echo -e "${YELLOW}⚠️ Gagal download semua font. Install termux-styling manual.${NC}"
+            echo -e "${YELLOW}⚠️ فشل تحميل جميع الخطوط. قم بتثبيت termux-styling يدويًا.${NC}"
+            pkg install -y termux-styling
+            echo -e "   Jalankan 'chfont' dan pilih font yang support Arab."
+            echo -e "   قم بتشغيل 'chfont' واختر خطًا يدعم العربية."
+        fi
+    fi
+
+    # Set locale UTF-8 di .bashrc
+    if ! grep -q "LANG=en_US.UTF-8" "$HOME/.bashrc" 2>/dev/null; then
+        echo "export LANG=en_US.UTF-8" >> "$HOME/.bashrc"
+    fi
+    if ! grep -q "LC_ALL=en_US.UTF-8" "$HOME/.bashrc" 2>/dev/null; then
+        echo "export LC_ALL=en_US.UTF-8" >> "$HOME/.bashrc"
+    fi
+
+    echo -e "${YELLOW}⚠️ PENTING: Restart Termux (ketik 'exit' dan buka lagi) agar font berlaku!${NC}"
+    echo -e "${YELLOW}⚠️ مهم: أعد تشغيل Termux (اكتب 'exit' ثم افتح مجددًا) لتطبيق التغييرات!${NC}"
+    echo ""
+fi
