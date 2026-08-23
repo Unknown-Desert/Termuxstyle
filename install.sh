@@ -32,21 +32,6 @@ cd "$HOME" || {
     exit 1
 }
 
-if [[ -f "$HOME/termux.sh" ]]; then
-    rm -f "$HOME/termux.sh"
-    echo -e "${YELLOW}[i] Removed old termux.sh${NC}"
-fi
-
-if [[ -f "$HOME/termux.sh.backup" ]]; then
-    rm -f "$HOME/termux.sh.backup"
-    echo -e "${YELLOW}[i] Removed old termux.sh.backup${NC}"
-fi
-
-if [[ -f "$HOME/.cache_profile" ]]; then
-    rm -f "$HOME/.cache_profile"
-    echo -e "${YELLOW}[i] Removed old .cache_profile${NC}"
-fi
-
 BASHRC="$HOME/.bashrc"
 BASHRC_BACKUP="$HOME/.bashrc.backup"
 
@@ -95,6 +80,9 @@ if [[ -f "$HOME/termux.sh" ]]; then
         fi
         exit 1
     fi
+else
+    echo -e "${RED}❌ termux.sh tidak ditemukan di $HOME${NC}"
+    exit 1
 fi
 
 echo -e "${GREEN}✅ Cleanup complete!${NC}"
@@ -169,6 +157,22 @@ fi
 echo ""
 echo "🧹 Clearing cache..."
 pkg clean || true
+
+
+if [[ -f "$HOME/termux.sh" ]]; then
+    rm -f "$HOME/termux.sh"
+    echo -e "${YELLOW}[i] Removed old termux.sh${NC}"
+fi
+
+if [[ -f "$HOME/termux.sh.backup" ]]; then
+    rm -f "$HOME/termux.sh.backup"
+    echo -e "${YELLOW}[i] Removed old termux.sh.backup${NC}"
+fi
+
+if [[ -f "$HOME/.cache_profile" ]]; then
+    rm -f "$HOME/.cache_profile"
+    echo -e "${YELLOW}[i] Removed old .cache_profile${NC}"
+fi
 
 echo ""
 if [[ -f "$SOURCE_FILE" ]]; then
