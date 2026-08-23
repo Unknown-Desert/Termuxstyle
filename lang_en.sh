@@ -291,19 +291,14 @@ if [ ! -f "$PROFILE_FILE" ]; then
     echo "🛠️  First-time setup..."
     echo ""
 
-    read -p "Enter Banner Name: " FIGLET_TEXT
+    read -p "Enter Custom Banner Name (Default : Unknown): " FIGLET_TEXT
+    FIGLET_TEXT=${FIGLET_TEXT:-Unknown}
+    USE_FIGLET="true"
 
-    if [[ -n "$FIGLET_TEXT" ]]; then
-        USE_FIGLET="true"
-    else
-        USE_FIGLET="false"
-        FIGLET_TEXT="Unknown"
-    fi
-
-    read -p "Enter custom username for prompt @User (default User): " USER_NAME
+    read -p "Enter Custom Username (Default : User): " USER_NAME
     USER_NAME=${USER_NAME:-User}
--
-    echo "Enter 3 passwords (leave empty if you don't want password):"
+
+    echo "Enter 3 Custom Passwords (Defaul : ):"
     read -s PASS1
     echo ""
     read -s PASS2
@@ -311,7 +306,8 @@ if [ ! -f "$PROFILE_FILE" ]; then
     read -s PASS3
     echo ""
 
-    read -p "Enter password hint (optional): " HINT_PASSWORD
+    read -p "Enter Custom Hint Password (Default : Invisible): " HINT_PASSWORD
+    HINT_PASSWORD=${HINT_PASSWORD:-Invisible}
 
     cat > "$PROFILE_FILE" <<EOF
 # User profile – automatically generated

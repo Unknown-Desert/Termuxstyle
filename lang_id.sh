@@ -291,19 +291,15 @@ if [ ! -f "$PROFILE_FILE" ]; then
     echo "🛠️  Pengaturan pertama kali..."
     echo ""
 
-    read -p "Masukkan Nama Banner: " FIGLET_TEXT
+    read -p "Masukkan Custom Nama Banner (Default : Unknown): " FIGLET_TEXT
 
-    if [[ -n "$FIGLET_TEXT" ]]; then
-        USE_FIGLET="true"
-    else
-        USE_FIGLET="false"
-        FIGLET_TEXT="Unknown"
-    fi
+    FIGLET_TEXT=${FIGLET_TEXT:-Unknown}
+    USE_FIGLET="true"
 
-    read -p "Masukkan nama pengguna untuk prompt @User (default User): " USER_NAME
+    read -p "Masukkan Custom Username (Default : User): " USER_NAME
     USER_NAME=${USER_NAME:-User}
 
-    echo "Masukkan 3 password (kosongkan jika tidak ingin password):"
+    echo "Masukkan 3 Custom Password (Defaul : ):"
     read -s PASS1
     echo ""
     read -s PASS2
@@ -311,7 +307,8 @@ if [ ! -f "$PROFILE_FILE" ]; then
     read -s PASS3
     echo ""
 
-    read -p "Masukkan hint password (boleh kosong): " HINT_PASSWORD
+    read -p "Masukkan Custom Hint Password (Default : Invisible): " HINT_PASSWORD
+    HINT_PASSWORD=${HINT_PASSWORD:-Invisible}
 
     cat > "$PROFILE_FILE" <<EOF
 # Profil pengguna – dibuat otomatis
@@ -360,7 +357,6 @@ if [ "$USE_FIGLET" = "true" ]; then
       figlet -f slant "$FIGLET_TEXT" | while IFS= read -r line; do center "$line"; done
     fi
   else
-    echo -e "${RED}❌ Figlet Tidak di Temukan${NC}"
     center "${CYAN}$FIGLET_TEXT${NC}"
   fi
 else
