@@ -48,7 +48,6 @@ if [[ -f "$HOME/.cache_profile" ]]; then
 fi
 
 if [[ -f "$HOME/.bashrc" ]]; then
-    # Backup .bashrc
     cp "$HOME/.bashrc" "$HOME/.bashrc.backup_$(date +%Y%m%d_%H%M%S)"
     echo -e "${YELLOW}[i] .bashrc backup created${NC}"
     

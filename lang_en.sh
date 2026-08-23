@@ -291,19 +291,19 @@ if [ ! -f "$PROFILE_FILE" ]; then
     echo "🛠️  First-time setup..."
     echo ""
 
-    read -p "Use figlet for banner? (y/n, default n): " USE_FIGLET
-    case "$USE_FIGLET" in
-        y|Y|yes|YES) USE_FIGLET="true" ;;
-        *) USE_FIGLET="false" ;;
-    esac
+    read -p "Enter Banner Name: " FIGLET_TEXT
 
-    read -p "Enter name for figlet banner (default Unknown): " FIGLET_TEXT
-    FIGLET_TEXT=${FIGLET_TEXT:-Unknown}
+    if [[ -n "$FIGLET_TEXT" ]]; then
+        USE_FIGLET="true"
+    else
+        USE_FIGLET="false"
+        FIGLET_TEXT="Unknown"
+    fi
 
-    read -p "Enter username for prompt @User (default User): " USER_NAME
+    read -p "Enter custom username for prompt @User (default User): " USER_NAME
     USER_NAME=${USER_NAME:-User}
-
-    echo "Password (leave blank for empty default):"
+-
+    echo "Enter 3 passwords (leave empty if you don't want password):"
     read -s PASS1
     echo ""
     read -s PASS2
@@ -311,7 +311,7 @@ if [ ! -f "$PROFILE_FILE" ]; then
     read -s PASS3
     echo ""
 
-    read -p "Password hint (optional): " HINT_PASSWORD
+    read -p "Enter password hint (optional): " HINT_PASSWORD
 
     cat > "$PROFILE_FILE" <<EOF
 # User profile – automatically generated
@@ -332,12 +332,8 @@ source "$PROFILE_FILE"
 
 clear
 
-center "${YELLOW}       Enter 3 Passwords (Hint: Invisible)${NC}"
+center "${YELLOW}       Enter 3 Passwords (Hint: $HINT_PASSWORD)${NC}"
 echo ""
-
-if [ -n "$HINT_PASSWORD" ]; then
-    echo -e "${YELLOW}Hint: $HINT_PASSWORD${NC}"
-fi
 
 echo -ne "${YELLOW}Pass 1: ${NC}"
 read -s USER1 && tput cuu1 && tput el && echo ""
@@ -363,12 +359,13 @@ if [ "$USE_FIGLET" = "true" ]; then
       figlet -f slant "$FIGLET_TEXT" | while IFS= read -r line; do center "$line"; done
     fi
   else
-    echo -e "${RED}❌ Figlet not found.${NC}"
+    echo -e "${RED}❌ Figlet not found${NC}"
     center "${CYAN}$FIGLET_TEXT${NC}"
   fi
 else
   center "${CYAN}$FIGLET_TEXT${NC}"
 fi
+
 echo ""
 
 TODAY=$(date +"%A, %d %B %Y")
