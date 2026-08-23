@@ -25,20 +25,16 @@ if [[ -z "$BASH_VERSION" ]]; then
     exit 1
 fi
 
-# ===== Pindah ke home =====
 cd "$HOME" || {
     echo -e "${RED}❌ Failed to change to home directory.${NC}"
     exit 1
 }
 
-# ===== TIDAK MENYENTUH .bashrc DI SINI =====
 echo -e "${CYAN}[i] Preparing installation...${NC}"
 echo ""
 
-# ===== PEMILIHAN BAHASA =====
 if [[ -n "$1" ]]; then
     LANG_INPUT="$1"
-    # Hanya gunakan argumen sekali
     set -- ""
 else
     echo "🌐 Select Language"
@@ -71,7 +67,6 @@ echo ""
 echo -e "${CYAN}[i] Selected language: ${LANG_NAME}${NC}"
 echo ""
 
-# ===== INSTALASI DEPENDENSI =====
 echo "📦 Updating packages..."
 pkg update -y || {
     echo -e "${RED}❌ Failed to update packages.${NC}"
@@ -109,7 +104,6 @@ echo ""
 echo "🧹 Clearing cache..."
 pkg clean || true
 
-# ===== PEMBERSIHAN FILE LAMA (dipindah ke sini) =====
 echo ""
 echo -e "${CYAN}[i] Cleaning up old files...${NC}"
 
@@ -131,7 +125,6 @@ fi
 echo -e "${GREEN}✅ Cleanup complete!${NC}"
 echo ""
 
-# ===== LOOP PENYALINAN FILE BAHASA =====
 while true; do
     if [[ -f "$SOURCE_FILE" ]]; then
         cp -f "$SOURCE_FILE" "$TARGET_FILE"
@@ -168,7 +161,6 @@ while true; do
     fi
 done
 
-# ===== JALANKAN termux.sh TERLEBIH DAHULU =====
 echo ""
 echo -e "${CYAN}[i] Starting termux.sh...${NC}"
 cd "$HOME" || {
@@ -176,7 +168,6 @@ cd "$HOME" || {
     exit 1
 }
 
-# Backup .bashrc sebelum menjalankan termux.sh
 BASHRC="$HOME/.bashrc"
 BASHRC_BACKUP="$HOME/.bashrc.backup"
 
@@ -189,7 +180,6 @@ if [[ -f "$TARGET_FILE" ]]; then
     if bash "$TARGET_FILE"; then
         echo -e "${GREEN}✅ termux.sh berhasil dijalankan.${NC}"
 
-        # ===== TAMBAH SOURCE KE .bashrc HANYA SETELAH SUKSES =====
         if [ ! -f "$BASHRC" ]; then
             touch "$BASHRC"
         fi
@@ -201,7 +191,6 @@ if [[ -f "$TARGET_FILE" ]]; then
             echo -e "${GREEN}✅ Auto-load termux.sh ditambahkan ke .bashrc${NC}"
         fi
 
-        # Tambahkan LANG/LC_ALL jika belum ada
         if ! grep -q "export LANG=en_US.UTF-8" "$BASHRC" 2>/dev/null; then
             echo "export LANG=en_US.UTF-8" >> "$BASHRC"
         fi
@@ -223,5 +212,5 @@ if [[ -f "$TARGET_FILE" ]]; then
 else
     echo -e "${RED}❌ termux.sh tidak ditemukan di $HOME${NC}"
     echo -e "${YELLOW}[i] Kembali ke pemilihan bahasa...${NC}"
-    exec bash "$0"   # Restart skrip dari awal
+    exec bash "$0"
 fi
