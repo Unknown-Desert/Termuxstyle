@@ -32,9 +32,9 @@ Fill:
 
 - Custom Banner Name
 - Custom Username
-- Password
-- Password Hint
-- Short Call
+- Custom Password
+- Custom Password Hint
+- Custom Short Call
 
 How To Uninstall:
 
