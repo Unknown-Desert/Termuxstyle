@@ -87,19 +87,15 @@ fi
 
 RESOLV_FILE="$PREFIX/etc/resolv.conf"
 
-echo ""
-echo -e "${CYAN}[i] Mengembalikan DNS ke default...${NC}"
-
 {
     echo "nameserver 8.8.8.8"
     echo "nameserver 8.8.4.4"
 } > "$RESOLV_FILE"
 
-echo -e "${GREEN}✅ resolv.conf diatur ke DNS default (Google DNS).${NC}"
+echo -e "${GREEN}✅ DNS default (Google DNS).${NC}"
 
 echo ""
 echo -e "${GREEN}==============================================${NC}"
 echo -e "${GREEN}  ✅ UNINSTALL SELESAI${NC}"
 echo -e "${GREEN}  Kustomisasi Unknown-Desert telah dibersihkan.${NC}"
-echo -e "${GREEN}  Paket dependensi TIDAK dihapus.${NC}"
 echo -e "${GREEN}==============================================${NC}"
