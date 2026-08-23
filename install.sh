@@ -95,9 +95,6 @@ if [[ -f "$HOME/termux.sh" ]]; then
         fi
         exit 1
     fi
-else
-    echo -e "${RED}❌ termux.sh tidak ditemukan di $HOME${NC}"
-    exit 1
 fi
 
 echo -e "${GREEN}✅ Cleanup complete!${NC}"
