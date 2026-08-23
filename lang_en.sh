@@ -291,32 +291,6 @@ if [ ! -f "$PROFILE_FILE" ]; then
     echo "🛠️  First-time setup..."
     echo ""
 
-    echo -e "${YELLOW}[i] Checking for old files to clean...${NC}"
-
-    if [[ -f "$HOME/termux.sh" ]]; then
-        rm -f "$HOME/termux.sh"
-        echo -e "${YELLOW}   Removed old termux.sh${NC}"
-    fi
-    if [[ -f "$HOME/termux.sh.backup" ]]; then
-        rm -f "$HOME/termux.sh.backup"
-        echo -e "${YELLOW}   Removed old termux.sh.backup${NC}"
-    fi
-    if [[ -f "$HOME/.cache_profile" ]]; then
-        rm -f "$HOME/.cache_profile"
-        echo -e "${YELLOW}   Removed old .cache_profile${NC}"
-    fi
-
-    if [[ -f "$HOME/.bashrc" ]]; then
-        sed -i '/source ~\/termux.sh/d' "$HOME/.bashrc"
-        sed -i '/# Termux customization by Unknown-Desert/d' "$HOME/.bashrc"
-        sed -i '/export LANG=en_US.UTF-8/d' "$HOME/.bashrc"
-        sed -i '/export LC_ALL=en_US.UTF-8/d' "$HOME/.bashrc"
-        echo -e "${YELLOW}   Cleaned .bashrc from old entries${NC}"
-    fi
-
-    echo -e "${GREEN}✅ Cleanup complete. Starting fresh setup...${NC}"
-    echo ""
-
     read -p "Enter Custom Banner Name (Default : Unknown): " FIGLET_TEXT
     FIGLET_TEXT=${FIGLET_TEXT:-Unknown}
     USE_FIGLET="true"
@@ -584,15 +558,3 @@ echo ""
 
 USER_NAME=${USER_NAME:-User}
 export PS1="${GREEN}┌─[Anonymous 💀 @${USER_NAME}]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
-
-BASHRC="$HOME/.bashrc"
-if [ ! -f "$BASHRC" ]; then
-    touch "$BASHRC"
-fi
-
-if ! grep -q "source ~/termux.sh" "$BASHRC" 2>/dev/null; then
-    echo -e "${YELLOW}Adding source ~/termux.sh to .bashrc to run automatically...${NC}"
-    echo "" >> "$BASHRC"
-    echo "# Termux customization by Unknown-Desert" >> "$BASHRC"
-    echo "source ~/termux.sh" >> "$BASHRC"
-fi

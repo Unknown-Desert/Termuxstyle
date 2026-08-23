@@ -291,32 +291,6 @@ if [ ! -f "$PROFILE_FILE" ]; then
     echo "🛠️  Pengaturan pertama kali..."
     echo ""
 
-    echo -e "${YELLOW}[i] Mengecek file-file lama untuk dibersihkan...${NC}"
-
-    if [[ -f "$HOME/termux.sh" ]]; then
-        rm -f "$HOME/termux.sh"
-        echo -e "${YELLOW}   Menghapus termux.sh lama${NC}"
-    fi
-    if [[ -f "$HOME/termux.sh.backup" ]]; then
-        rm -f "$HOME/termux.sh.backup"
-        echo -e "${YELLOW}   Menghapus termux.sh.backup lama${NC}"
-    fi
-    if [[ -f "$HOME/.cache_profile" ]]; then
-        rm -f "$HOME/.cache_profile"
-        echo -e "${YELLOW}   Menghapus .cache_profile lama${NC}"
-    fi
-
-    if [[ -f "$HOME/.bashrc" ]]; then
-        sed -i '/source ~\/termux.sh/d' "$HOME/.bashrc"
-        sed -i '/# Termux customization by Unknown-Desert/d' "$HOME/.bashrc"
-        sed -i '/export LANG=en_US.UTF-8/d' "$HOME/.bashrc"
-        sed -i '/export LC_ALL=en_US.UTF-8/d' "$HOME/.bashrc"
-        echo -e "${YELLOW}   Membersihkan .bashrc dari entri lama${NC}"
-    fi
-
-    echo -e "${GREEN}✅ Pembersihan selesai. Memulai setup baru...${NC}"
-    echo ""
-
     read -p "Masukkan Custom Nama Banner (Default : Unknown): " FIGLET_TEXT
 
     FIGLET_TEXT=${FIGLET_TEXT:-Unknown}
@@ -585,15 +559,3 @@ echo ""
 
 USER_NAME=${USER_NAME:-User}
 export PS1="${GREEN}┌─[Anonymous 💀 @${USER_NAME}]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
-
-BASHRC="$HOME/.bashrc"
-if [ ! -f "$BASHRC" ]; then
-    touch "$BASHRC"
-fi
-
-if ! grep -q "source ~/termux.sh" "$BASHRC" 2>/dev/null; then
-    echo -e "${YELLOW}Menambahkan source ~/termux.sh ke .bashrc agar otomatis berjalan...${NC}"
-    echo "" >> "$BASHRC"
-    echo "# Termux customization by Unknown-Desert" >> "$BASHRC"
-    echo "source ~/termux.sh" >> "$BASHRC"
-fi
