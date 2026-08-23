@@ -19,7 +19,7 @@ git clone https://github.com/Unknown-Desert/Termuxstyle.git
 Open Folder
 
 ```bash
-cd Termux
+cd Termuxstyle
 ```
 
 Run Installer
@@ -28,14 +28,22 @@ Run Installer
 bash install.sh
 ```
 
-Back Home
+Fill:
+
+- Custom Banner Name
+- Custom Username
+- Password
+- Password Hint
+- Short Call
+
+How To Uninstall:
 
 ```bash
-cd
+cd Termuxstyle
 ```
 
-Run Custom (termux.sh)
+Set Default or Delete:
 
 ```bash
-bash termux.sh
+bash uninstall.sh
 ```
