@@ -1,5 +1,33 @@
 #!/usr/bin/env bash
 
+# ============================================
+#  TERMUX - KONFIGURASI BAHASA ARAB (TRADISIONAL)
+#  TERMUX - تكوين اللغة العربية (الفصحى)
+#  BY Unknown-Desert
+# ============================================
+
+# ============================================
+#  PASTIKAN ENCODING UTF-8
+#  تأكيد ترميز UTF-8
+# ============================================
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
+# ============================================
+#  CEK FONT ARAB
+#  التحقق من وجود خط عربي
+# ============================================
+if [[ ! -f "$HOME/.termux/font.ttf" ]]; then
+    echo -e "\033[1;33m⚠️  Font Arab tidak terdeteksi! / لم يتم اكتشاف خط عربي!\"\033[0m"
+    echo -e "\033[1;33m   Solusi: jalankan install.sh dan pilih bahasa Arab.\033[0m"
+    echo -e "\033[1;33m   الحل: قم بتشغيل install.sh واختر اللغة العربية.\033[0m"
+    echo ""
+    sleep 3
+fi
+
+# ============================================
+#  WARNA / الألوان
+# ============================================
 RED=$'\033[1;31m'
 WHITE=$'\033[1;37m'
 CYAN=$'\033[1;36m'
@@ -7,6 +35,9 @@ GREEN=$'\033[1;32m'
 YELLOW=$'\033[1;33m'
 NC=$'\033[0m'
 
+# ============================================
+#  FUNGSI BANTUAN / دوال مساعدة
+# ============================================
 center() {
   local text="$1"
   local width=$(tput cols)
@@ -28,6 +59,9 @@ type_text() {
   echo ""
 }
 
+# ============================================
+#  FAKE OFFLINE - ALIAS PALSU / أوامر مزيّفة
+# ============================================
 FAKE_ALIASES=(ping curl wget git npm apt nc ssh ping6 ftp scp proxy)
 
 set_fake_proxy() {
@@ -43,18 +77,19 @@ export FAKE_OFFLINE_ACTIVE=true
 export FAKE_OFFLINE_REMIND_SHOWN=false
 export FAKE_OFFLINE_STATUS="ON"
 
-ping()   { echo "ping: مضيف غير معروف"; fakeoffcheck "ping"; }
-curl()   { echo "curl: مهلة الشبكة"; fakeoffcheck "curl"; }
-wget()   { echo "wget: فشل: لا يوجد مسار إلى المضيف."; fakeoffcheck "wget"; }
-git()    { echo "git: خطأ قاتل: غير قادر على الوصول: تعذر حل اسم المضيف"; fakeoffcheck "git"; }
-npm()    { echo "npm ERR! فشل طلب الشبكة"; fakeoffcheck "npm"; }
-apt()    { echo "E: غير قادر على جلب الحزم، تحقق من اتصالك بالإنترنت"; fakeoffcheck "apt"; }
-nc()     { echo "nc: تم رفض الاتصال"; fakeoffcheck "nc"; }
-ssh()    { echo "ssh: مهلة الاتصال"; fakeoffcheck "ssh"; }
-ping6()  { echo "ping6: غير قابل للوصول"; fakeoffcheck "ping6"; }
-ftp()    { echo "ftp: انقطع الاتصال"; fakeoffcheck "ftp"; }
-scp()    { echo "scp: الشبكة غير قابلة للوصول"; fakeoffcheck "scp"; }
-proxy()  { echo "proxy: تم رفض الاتصال"; fakeoffcheck "proxy"; unset_fake_proxy; }
+# Definisikan alias palsu dengan pesan Arab
+ping()   { echo "ping: مضيف غير معروف / unknown host"; fakeoffcheck "ping"; }
+curl()   { echo "curl: انتهت مهلة الشبكة / network timeout"; fakeoffcheck "curl"; }
+wget()   { echo "wget: فشل: لا يوجد مسار إلى المضيف / failed: No route to host"; fakeoffcheck "wget"; }
+git()    { echo "git: خطأ فادح: تعذر الوصول / fatal: unable to access"; fakeoffcheck "git"; }
+npm()    { echo "npm ERR! فشل طلب الشبكة / network request failed"; fakeoffcheck "npm"; }
+apt()    { echo "E: تعذر جلب الحزم، تأكد من اتصالك بالإنترنت / Unable to fetch packages"; fakeoffcheck "apt"; }
+nc()     { echo "nc: تم رفض الاتصال / connection refused"; fakeoffcheck "nc"; }
+ssh()    { echo "ssh: انتهت مهلة الاتصال / connection timeout"; fakeoffcheck "ssh"; }
+ping6()  { echo "ping6: لا يمكن الوصول / unreachable"; fakeoffcheck "ping6"; }
+ftp()    { echo "ftp: انقطع الاتصال / connection lost"; fakeoffcheck "ftp"; }
+scp()    { echo "scp: الشبكة لا يمكن الوصول إليها / network unreachable"; fakeoffcheck "scp"; }
+proxy()  { echo "proxy: تم رفض الاتصال / connection refused"; fakeoffcheck "proxy"; unset_fake_proxy; }
 
 set_fake_proxy
 
@@ -68,18 +103,18 @@ declare -a DISABLED_ALIASES=()
 enable_specific_aliases() {
   for alias_name in "${DISABLED_ALIASES[@]}"; do
     case "$alias_name" in
-      ping)   ping()   { echo "ping: مضيف غير معروف"; fakeoffcheck "ping"; } ;;
-      curl)   curl()   { echo "curl: مهلة الشبكة"; fakeoffcheck "curl"; } ;;
-      wget)   wget()   { echo "wget: فشل: لا يوجد مسار إلى المضيف."; fakeoffcheck "wget"; } ;;
-      git)    git()    { echo "git: خطأ قاتل: غير قادر على الوصول: تعذر حل اسم المضيف"; fakeoffcheck "git"; } ;;
-      npm)    npm()    { echo "npm ERR! فشل طلب الشبكة"; fakeoffcheck "npm"; } ;;
-      apt)    apt()    { echo "E: غير قادر على جلب الحزم، تحقق من اتصالك بالإنترنت"; fakeoffcheck "apt"; } ;;
-      nc)     nc()     { echo "nc: تم رفض الاتصال"; fakeoffcheck "nc"; } ;;
-      ssh)    ssh()    { echo "ssh: مهلة الاتصال"; fakeoffcheck "ssh"; } ;;
-      ping6)  ping6()  { echo "ping6: غير قابل للوصول"; fakeoffcheck "ping6"; } ;;
-      ftp)    ftp()    { echo "ftp: انقطع الاتصال"; fakeoffcheck "ftp"; } ;;
-      scp)    scp()    { echo "scp: الشبكة غير قابلة للوصول"; fakeoffcheck "scp"; } ;;
-      proxy)  proxy()  { echo "proxy: تم رفض الاتصال"; fakeoffcheck "proxy"; unset_fake_proxy; } ;;
+      ping)   ping()   { echo "ping: مضيف غير معروف / unknown host"; fakeoffcheck "ping"; } ;;
+      curl)   curl()   { echo "curl: انتهت مهلة الشبكة / network timeout"; fakeoffcheck "curl"; } ;;
+      wget)   wget()   { echo "wget: فشل: لا يوجد مسار إلى المضيف / failed: No route to host"; fakeoffcheck "wget"; } ;;
+      git)    git()    { echo "git: خطأ فادح: تعذر الوصول / fatal: unable to access"; fakeoffcheck "git"; } ;;
+      npm)    npm()    { echo "npm ERR! فشل طلب الشبكة / network request failed"; fakeoffcheck "npm"; } ;;
+      apt)    apt()    { echo "E: تعذر جلب الحزم، تأكد من اتصالك بالإنترنت / Unable to fetch packages"; fakeoffcheck "apt"; } ;;
+      nc)     nc()     { echo "nc: تم رفض الاتصال / connection refused"; fakeoffcheck "nc"; } ;;
+      ssh)    ssh()    { echo "ssh: انتهت مهلة الاتصال / connection timeout"; fakeoffcheck "ssh"; } ;;
+      ping6)  ping6()  { echo "ping6: لا يمكن الوصول / unreachable"; fakeoffcheck "ping6"; } ;;
+      ftp)    ftp()    { echo "ftp: انقطع الاتصال / connection lost"; fakeoffcheck "ftp"; } ;;
+      scp)    scp()    { echo "scp: الشبكة لا يمكن الوصول إليها / network unreachable"; fakeoffcheck "scp"; } ;;
+      proxy)  proxy()  { echo "proxy: تم رفض الاتصال / connection refused"; fakeoffcheck "proxy"; unset_fake_proxy; } ;;
     esac
   done
   DISABLED_ALIASES=()
@@ -87,18 +122,18 @@ enable_specific_aliases() {
 
 enable_fake_offline() {
   set_fake_proxy
-  ping()   { echo "ping: مضيف غير معروف"; fakeoffcheck "ping"; }
-  curl()   { echo "curl: مهلة الشبكة"; fakeoffcheck "curl"; }
-  wget()   { echo "wget: فشل: لا يوجد مسار إلى المضيف."; fakeoffcheck "wget"; }
-  git()    { echo "git: خطأ قاتل: غير قادر على الوصول: تعذر حل اسم المضيف"; fakeoffcheck "git"; }
-  npm()    { echo "npm ERR! فشل طلب الشبكة"; fakeoffcheck "npm"; }
-  apt()    { echo "E: غير قادر على جلب الحزم، تحقق من اتصالك بالإنترنت"; fakeoffcheck "apt"; }
-  nc()     { echo "nc: تم رفض الاتصال"; fakeoffcheck "nc"; }
-  ssh()    { echo "ssh: مهلة الاتصال"; fakeoffcheck "ssh"; }
-  ping6()  { echo "ping6: غير قابل للوصول"; fakeoffcheck "ping6"; }
-  ftp()    { echo "ftp: انقطع الاتصال"; fakeoffcheck "ftp"; }
-  scp()    { echo "scp: الشبكة غير قابلة للوصول"; fakeoffcheck "scp"; }
-  proxy()  { echo "proxy: تم رفض الاتصال"; fakeoffcheck "proxy"; unset_fake_proxy; }
+  ping()   { echo "ping: مضيف غير معروف / unknown host"; fakeoffcheck "ping"; }
+  curl()   { echo "curl: انتهت مهلة الشبكة / network timeout"; fakeoffcheck "curl"; }
+  wget()   { echo "wget: فشل: لا يوجد مسار إلى المضيف / failed: No route to host"; fakeoffcheck "wget"; }
+  git()    { echo "git: خطأ فادح: تعذر الوصول / fatal: unable to access"; fakeoffcheck "git"; }
+  npm()    { echo "npm ERR! فشل طلب الشبكة / network request failed"; fakeoffcheck "npm"; }
+  apt()    { echo "E: تعذر جلب الحزم، تأكد من اتصالك بالإنترنت / Unable to fetch packages"; fakeoffcheck "apt"; }
+  nc()     { echo "nc: تم رفض الاتصال / connection refused"; fakeoffcheck "nc"; }
+  ssh()    { echo "ssh: انتهت مهلة الاتصال / connection timeout"; fakeoffcheck "ssh"; }
+  ping6()  { echo "ping6: لا يمكن الوصول / unreachable"; fakeoffcheck "ping6"; }
+  ftp()    { echo "ftp: انقطع الاتصال / connection lost"; fakeoffcheck "ftp"; }
+  scp()    { echo "scp: الشبكة لا يمكن الوصول إليها / network unreachable"; fakeoffcheck "scp"; }
+  proxy()  { echo "proxy: تم رفض الاتصال / connection refused"; fakeoffcheck "proxy"; unset_fake_proxy; }
   export FAKE_OFFLINE_ACTIVE=true
   export FAKE_OFFLINE_STATUS="ON"
   DISABLED_ALIASES=()
@@ -114,47 +149,51 @@ disable_fake_offline() {
   DISABLED_ALIASES=()
 }
 
+# ============================================
+#  INTERAKSI DENGAN PENGGUNA (DUAL BAHASA)
+#  التفاعل مع المستخدم (لغتان)
+# ============================================
 fakeoff() {
   if [ "$FAKE_OFFLINE_ACTIVE" != "true" ]; then
-    echo "ℹ️ عدم الاتصال الوهمي غير نشط."
+    echo "ℹ️  Fake Offline tidak aktif / الإنترنت الوهمي غير نشط."
     return
   fi
 
-  echo -e "\n🕵️  طبقة عدم الاتصال الوهمي نشطة."
-  echo "➤ الخيارات:"
-  echo "  [1] تعطيل كل طبقة عدم الاتصال الوهمي"
-  echo "  [2] اختيار أوامر معينة لتعطيلها"
-  echo "  [3] تجاهل (لن يتم السؤال مرة أخرى)"
+  echo -e "\n🕵️  Fake Offline Layer aktif / طبقة الإنترنت الوهمي نشطة."
+  echo "➤ Pilihan / الخيارات:"
+  echo "  [1] Nonaktifkan semua / تعطيل الكل"
+  echo "  [2] Pilih perintah tertentu / اختيار أوامر معينة"
+  echo "  [3] Abaikan / تجاهل (tidak akan ditanya lagi)"
 
-  echo -n "اختر (1/2/3): "
+  echo -n "Pilih / اختر (1/2/3): "
   read -r pilihan
 
   case "$pilihan" in
     1)
-      echo -e "\nاختر وضع التعطيل:"
-      echo "  [1] مؤقت (1-15 دقيقة)"
-      echo "  [2] حتى يتم إغلاق تيرمكس"
-      echo -n "الوضع (1/2): "
+      echo -e "\nPilih mode / اختر الوضع:"
+      echo "  [1] Sementara (1-15 menit) / مؤقت (١-١٥ دقيقة)"
+      echo "  [2] Sampai Termux ditutup / حتى يتم إغلاق Termux"
+      echo -n "Mode / الوضع (1/2): "
       read -r mode
 
       if [[ "$mode" == "1" ]]; then
-        echo -n "⏱ مدة التعطيل (1-15 دقيقة، الافتراضي 3): "
+        echo -n "Durasi (1-15, default 3): "
         read -r dur
         [[ "$dur" =~ ^[0-9]+$ && "$dur" -ge 1 && "$dur" -le 15 ]] || dur=3
 
-        echo "🛑 تعطيل كل طبقة عدم الاتصال الوهمي لمدة $dur دقيقة..."
+        echo "🛑 Nonaktifkan semua selama $dur menit / تعطيل الكل لمدة $dur دقيقة..."
         disable_fake_offline
 
         (
           sleep "$((dur * 60))"
-          echo -e "\n🔄 إعادة تفعيل طبقة عدم الاتصال الوهمي..."
+          echo -e "\n🔄 Aktifkan ulang / إعادة التفعيل..."
           enable_fake_offline
         ) &
       elif [[ "$mode" == "2" ]]; then
-        echo "🛑 تعطيل كل طبقة عدم الاتصال الوهمي حتى يتم إغلاق تيرمكس..."
+        echo "🛑 Nonaktifkan sampai Termux ditutup / تعطيل حتى إغلاق Termux..."
         disable_fake_offline
       else
-        echo "❌ وضع غير صالح. تم التجاهل."
+        echo "❌ Mode tidak valid / وضع غير صالح. Abaikan."
       fi
       ;;
 
@@ -163,12 +202,12 @@ fakeoff() {
       ;;
 
     3)
-      echo "✅ لن يتم السؤال مرة أخرى في هذه الجلسة."
+      echo "✅ Tidak akan ditanya lagi / لن يتم السؤال مرة أخرى."
       export FAKE_OFFLINE_REMIND_SHOWN=true
       ;;
 
     *)
-      echo "❌ اختيار غير صالح. تم التجاهل."
+      echo "❌ Pilihan tidak valid / اختيار غير صالح. Abaikan."
       ;;
   esac
 }
@@ -176,30 +215,30 @@ fakeoff() {
 fake_offline_menu() {
   local ALIASES=(ping curl wget git npm apt nc ssh ping6 ftp scp proxy)
 
-  echo -e "\n🔧 اختر الأمر الذي تريد تعطيله:"
+  echo -e "\n🔧 Pilih perintah yang akan dinonaktifkan / اختر الأمر المطلوب تعطيله:"
   for i in "${!ALIASES[@]}"; do
     echo "  $((i + 1)). ${ALIASES[$i]}"
   done
 
-  echo -n "أدخل أرقام الأوامر (مفصولة بمسافات، مثال: 2 4 6): "
+  echo -n "Nomor (pisah spasi) / الأرقام (مفصولة بمسافات): "
   read -r pilihan
 
-  [[ -z "$pilihan" ]] && echo "😶‍🌫️ لم يتم اختيار أي أمر." && return
+  [[ -z "$pilihan" ]] && echo "Tidak ada yang dipilih / لم يتم اختيار شيء." && return
 
-  echo -e "\n🎯 اختر الوضع:"
-  echo "  [1] تعطيل مؤقت (1-15 دقيقة)"
-  echo "  [2] تعطيل حتى يتم إغلاق تيرمكس"
-  echo -n "اختر الوضع (1/2): "
+  echo -e "\n🎯 Pilih mode / اختر الوضع:"
+  echo "  [1] Sementara (1-15 menit) / مؤقت"
+  echo "  [2] Sampai Termux ditutup / حتى إغلاق Termux"
+  echo -n "Mode / الوضع (1/2): "
   read -r mode
 
   if [[ "$mode" != "1" && "$mode" != "2" ]]; then
-    echo "❌ وضع غير صالح."
+    echo "❌ Mode tidak valid / وضع غير صالح."
     return
   fi
 
   local dur=3
   if [[ "$mode" == "1" ]]; then
-    echo -n "⏱ المدة (1-15 دقيقة، الافتراضي 3): "
+    echo -n "Durasi (1-15, default 3): "
     read -r dur
     [[ "$dur" =~ ^[0-9]+$ && "$dur" -ge 1 && "$dur" -le 15 ]] || dur=3
   fi
@@ -209,14 +248,14 @@ fake_offline_menu() {
     idx=$((num - 1))
     alias_name="${ALIASES[$idx]}"
     if [[ -z "$alias_name" ]]; then
-      echo "❌ الرقم $num غير صالح."
+      echo "❌ Nomor $num tidak valid / الرقم $num غير صالح."
       continue
     fi
     selected_aliases+=("$alias_name")
   done
 
   if [ ${#selected_aliases[@]} -eq 0 ]; then
-    echo "😶‍🌫️ لم يتم اختيار أوامر صالحة."
+    echo "Tidak ada perintah valid / لا توجد أوامر صالحة."
     return
   fi
 
@@ -227,7 +266,7 @@ fake_offline_menu() {
     else
       unset -f "$alias_name" 2>/dev/null
     fi
-    echo "🛑 '${alias_name}' تم تعطيله."
+    echo "🛑 '${alias_name}' dinonaktifkan / تم تعطيله."
   done
 
   DISABLED_ALIASES=("${selected_aliases[@]}")
@@ -235,22 +274,22 @@ fake_offline_menu() {
   if [[ "$mode" == "1" ]]; then
     (
       sleep $((dur * 60))
-      echo -e "\n🔄 إعادة تفعيل الأوامر المعطلة: ${DISABLED_ALIASES[*]}"
+      echo -e "\n🔄 Mengaktifkan ulang / إعادة تفعيل: ${DISABLED_ALIASES[*]}"
       local to_reactivate=("${DISABLED_ALIASES[@]}")
       for alias_name in "${to_reactivate[@]}"; do
         case "$alias_name" in
-          ping)   ping()   { echo "ping: مضيف غير معروف"; fakeoffcheck "ping"; } ;;
-          curl)   curl()   { echo "curl: مهلة الشبكة"; fakeoffcheck "curl"; } ;;
-          wget)   wget()   { echo "wget: فشل: لا يوجد مسار إلى المضيف."; fakeoffcheck "wget"; } ;;
-          git)    git()    { echo "git: خطأ قاتل: غير قادر على الوصول: تعذر حل اسم المضيف"; fakeoffcheck "git"; } ;;
-          npm)    npm()    { echo "npm ERR! فشل طلب الشبكة"; fakeoffcheck "npm"; } ;;
-          apt)    apt()    { echo "E: غير قادر على جلب الحزم، تحقق من اتصالك بالإنترنت"; fakeoffcheck "apt"; } ;;
-          nc)     nc()     { echo "nc: تم رفض الاتصال"; fakeoffcheck "nc"; } ;;
-          ssh)    ssh()    { echo "ssh: مهلة الاتصال"; fakeoffcheck "ssh"; } ;;
-          ping6)  ping6()  { echo "ping6: غير قابل للوصول"; fakeoffcheck "ping6"; } ;;
-          ftp)    ftp()    { echo "ftp: انقطع الاتصال"; fakeoffcheck "ftp"; } ;;
-          scp)    scp()    { echo "scp: الشبكة غير قابلة للوصول"; fakeoffcheck "scp"; } ;;
-          proxy)  proxy()  { echo "proxy: تم رفض الاتصال"; fakeoffcheck "proxy"; unset_fake_proxy; } ;;
+          ping)   ping()   { echo "ping: مضيف غير معروف / unknown host"; fakeoffcheck "ping"; } ;;
+          curl)   curl()   { echo "curl: انتهت مهلة الشبكة / network timeout"; fakeoffcheck "curl"; } ;;
+          wget)   wget()   { echo "wget: فشل: لا يوجد مسار إلى المضيف / failed: No route to host"; fakeoffcheck "wget"; } ;;
+          git)    git()    { echo "git: خطأ فادح: تعذر الوصول / fatal: unable to access"; fakeoffcheck "git"; } ;;
+          npm)    npm()    { echo "npm ERR! فشل طلب الشبكة / network request failed"; fakeoffcheck "npm"; } ;;
+          apt)    apt()    { echo "E: تعذر جلب الحزم، تأكد من اتصالك بالإنترنت / Unable to fetch packages"; fakeoffcheck "apt"; } ;;
+          nc)     nc()     { echo "nc: تم رفض الاتصال / connection refused"; fakeoffcheck "nc"; } ;;
+          ssh)    ssh()    { echo "ssh: انتهت مهلة الاتصال / connection timeout"; fakeoffcheck "ssh"; } ;;
+          ping6)  ping6()  { echo "ping6: لا يمكن الوصول / unreachable"; fakeoffcheck "ping6"; } ;;
+          ftp)    ftp()    { echo "ftp: انقطع الاتصال / connection lost"; fakeoffcheck "ftp"; } ;;
+          scp)    scp()    { echo "scp: الشبكة لا يمكن الوصول إليها / network unreachable"; fakeoffcheck "scp"; } ;;
+          proxy)  proxy()  { echo "proxy: تم رفض الاتصال / connection refused"; fakeoffcheck "proxy"; unset_fake_proxy; } ;;
         esac
       done
       DISABLED_ALIASES=()
@@ -260,7 +299,7 @@ fake_offline_menu() {
 
 fakeoffcheck() {
   if [ "$FAKE_OFFLINE_ACTIVE" = "true" ] && [ "$FAKE_OFFLINE_REMIND_SHOWN" != "true" ]; then
-    echo -e "\n⚠️  تم اكتشاف استخدام الأمر '$1' أثناء تفعيل عدم الاتصال الوهمي."
+    echo -e "\n⚠️  Terdeteksi perintah '$1' saat Fake Offline aktif / تم اكتشاف استخدام الأمر '$1' أثناء تفعيل الإنترنت الوهمي."
     fakeoff
   fi
 }
@@ -276,7 +315,7 @@ detect_fake_proxy_use() {
   for cmd in "${triggers[@]}"; do
     if [[ "$lastcmd" == "$cmd "* || "$lastcmd" == *" $cmd "* || "$lastcmd" == *"$cmd" ]]; then
       if [[ "$http_proxy" == "http://127.0.0.1:9" || "$https_proxy" == "http://127.0.0.1:9" ]]; then
-        fakeoffcheck "بروكسي (الأمر المكتشف: $cmd)"
+        fakeoffcheck "proxy (perintah: $cmd)"
         break
       fi
     fi
@@ -285,20 +324,23 @@ detect_fake_proxy_use() {
 
 export PROMPT_COMMAND="detect_fake_proxy_use"
 
+# ============================================
+#  PROFIL PENGGUNA (PASSWORD)
+#  الملف الشخصي (كلمات المرور)
+# ============================================
 PROFILE_FILE="$HOME/.cache_profile"
 
 if [ ! -f "$PROFILE_FILE" ]; then
-    echo "🛠️  الإعداد لأول مرة..."
+    echo "🛠️  Pengaturan pertama kali / الإعداد لأول مرة..."
     echo ""
 
-    # --- Figlet ---
-    read -p "استخدام figlet للبانر؟ (y/n، الافتراضي n): " USE_FIGLET
+    read -p "Gunakan figlet untuk banner? (y/n, default n) / استخدام figlet للشعار؟: " USE_FIGLET
     case "$USE_FIGLET" in
         y|Y|yes|YES) USE_FIGLET="true" ;;
         *) USE_FIGLET="false" ;;
     esac
 
-    echo "كلمة المرور (اتركها فارغة للافتراضي الفارغ):"
+    echo "Password (kosongkan untuk default kosong) / كلمة المرور (اتركها فارغة للافتراضي الفارغ):"
     read -s PASS1
     echo ""
     read -s PASS2
@@ -306,10 +348,10 @@ if [ ! -f "$PROFILE_FILE" ]; then
     read -s PASS3
     echo ""
 
-    read -p "تلميح كلمة المرور (اختياري): " HINT_PASSWORD
+    read -p "Hint password (opsional) / تلميح كلمة المرور (اختياري): " HINT_PASSWORD
 
     cat > "$PROFILE_FILE" <<EOF
-# ملف المستخدم – تم إنشاؤه تلقائياً
+# Profil pengguna / الملف الشخصي – dibuat otomatis
 USE_FIGLET="$USE_FIGLET"
 PASSWORD1="$PASS1"
 PASSWORD2="$PASS2"
@@ -317,100 +359,105 @@ PASSWORD3="$PASS3"
 HINT_PASSWORD="$HINT_PASSWORD"
 EOF
 
-    echo "✅ تم حفظ الملف الشخصي في $PROFILE_FILE"
+    echo "✅ Profil disimpan di / تم حفظ الملف الشخصي في $PROFILE_FILE"
     echo ""
 fi
 
 source "$PROFILE_FILE"
 
+# ============================================
+#  AUTHENTIKASI 3 PASSWORD
+#  المصادقة بثلاث كلمات مرور
+# ============================================
 clear
 
-center "${YELLOW}       أدخل 3 كلمات مرور (تلميح: غير مرئية)${NC}"
+center "${YELLOW}       Masukkan 3 Password (Tersembunyi) / أدخل ٣ كلمات مرور (غير مرئية)${NC}"
 echo ""
 
 if [ -n "$HINT_PASSWORD" ]; then
-    echo -e "${YELLOW}تلميح: $HINT_PASSWORD${NC}"
+    echo -e "${YELLOW}Hint / تلميح: $HINT_PASSWORD${NC}"
 fi
 
-echo -ne "${YELLOW}كلمة المرور 1: ${NC}"
+echo -ne "${YELLOW}Pass 1 / كلمة المرور ١: ${NC}"
 read -s USER1 && tput cuu1 && tput el && echo ""
-[[ "$USER1" != "$PASSWORD1" ]] && echo -e "${RED}❌ كلمة المرور 1 خاطئة.${NC}" && exit 1
+[[ "$USER1" != "$PASSWORD1" ]] && echo -e "${RED}❌ Password 1 salah / كلمة المرور ١ خاطئة.${NC}" && exit 1
 
-echo -ne "${YELLOW}كلمة المرور 2: ${NC}"
+echo -ne "${YELLOW}Pass 2 / كلمة المرور ٢: ${NC}"
 read -s USER2 && tput cuu1 && tput el && echo ""
-[[ "$USER2" != "$PASSWORD2" ]] && echo -e "${RED}❌ كلمة المرور 2 خاطئة.${NC}" && exit 1
+[[ "$USER2" != "$PASSWORD2" ]] && echo -e "${RED}❌ Password 2 salah / كلمة المرور ٢ خاطئة.${NC}" && exit 1
 
-echo -ne "${YELLOW}كلمة المرور 3: ${NC}"
+echo -ne "${YELLOW}Pass 3 / كلمة المرور ٣: ${NC}"
 read -s USER3 && tput cuu1 && tput el && echo ""
-[[ "$USER3" != "$PASSWORD3" ]] && echo -e "${RED}❌ كلمة المرور 3 خاطئة.${NC}" && exit 1
+[[ "$USER3" != "$PASSWORD3" ]] && echo -e "${RED}❌ Password 3 salah / كلمة المرور ٣ خاطئة.${NC}" && exit 1
 
 clear
 
+# ============================================
+#  BANNER / الشعار
+# ============================================
 if [ "$USE_FIGLET" = "true" ]; then
   if command -v figlet >/dev/null 2>&1; then
     if command -v lolcat >/dev/null 2>&1 && echo "test" | lolcat >/dev/null 2>&1; then
-      figlet -f slant "Unknown" | while IFS= read -r line; do center "$line"; done | lolcat
+      figlet -f slant "مجهول" | while IFS= read -r line; do center "$line"; done | lolcat
     else
-      figlet -f slant "Unknown" | while IFS= read -r line; do center "$line"; done
+      figlet -f slant "مجهول" | while IFS= read -r line; do center "$line"; done
     fi
   else
-    echo -e "${RED}❌ لم يتم العثور على figlet.${NC}"
-    center "${CYAN}UNKNOWN${NC}"
+    echo -e "${RED}❌ Figlet tidak ditemukan / لم يتم العثور على figlet.${NC}"
+    center "${CYAN}مجهول${NC}"
   fi
 else
-  center "${CYAN}UNKNOWN${NC}"
+  center "${CYAN}مجهول${NC}"
 fi
 echo ""
 
-TODAY=$(date +"%A, %d %B %Y")
+TODAY=$(date +"%A، %d %B %Y")
 center "${WHITE}     📆 $TODAY${NC}"
 echo ""
-center "${CYAN}        ⫸   مرحباً بكم في تيرمكس من Unknown-Desert   ⫷${NC}"
+center "${CYAN}        ⫸   SELAMAT DATANG / مرحباً بكم في TERMUX BY Unknown-Desert   ⫷${NC}"
 echo ""
 sleep 0.2
 
+# ============================================
+#  MOTIVASI / تحفيز
+# ============================================
 MOTIVASI_LIST=(
-  "لا تستسلم أبداً"
-  "الفشل معلم"
-  "استمر حتى لو كان صعباً"
-  "اخسر اليوم، انهض غداً"
-  "لا فشل لا نجاح"
-  "حارب الكسل"
-  "لا تستسلم يا صديقي!"
-  "ابدأ الآن"
-  "يمكنك فعلها!"
-  "تقدم للأمام، لا تتردد"
+  "لا تستسلم أبداً / Pantang Menyerah"
+  "الفشل هو معلم النجاح / Gagal itu Guru"
+  "استمر حتى لو كان صعباً / Teruskan Walau Berat"
+  "اخسر اليوم وانهض غداً / Kalah Hari Ini, Bangkit Besok"
+  "لا نجاح بدون فشل / Tak Ada Sukses Tanpa Gagal"
+  "حارب الكسل / Lawan Malas"
+  "لا تستسلم يا صديقي / Jangan Menyerah Bro!"
+  "ابدأ الآن / Mulai Sekarang"
+  "أنت قادر / Kamu Bisa!"
+  "تقدّم بثقة / Maju dengan Percaya Diri"
 )
 RANDOM_MOTIVASI=${MOTIVASI_LIST[$RANDOM % ${#MOTIVASI_LIST[@]}]}
-center "${WHITE} 🥶 تحفيز"
+center "${WHITE} 🥶 MOTIVASI / تحفيز"
 center "${WHITE}              ${CYAN}${RANDOM_MOTIVASI}${NC}"
 echo ""
 
+# ============================================
+#  DNS TERENKRIPSI / DNS مشفّر
+# ============================================
 DNS_FILE="$PREFIX/etc/resolv.conf"
 IS_SAFE=false
 
 try_cloudflared() {
   command -v cloudflared >/dev/null 2>&1 || return 1
-
   pkill -f "cloudflared proxy-dns" 2>/dev/null
   sleep 1
-
   {
     cloudflared proxy-dns --port 5053 >/dev/null 2>&1 &
   } 2>/dev/null
   disown 2>/dev/null
   sleep 3
-
-  if pgrep -f "cloudflared proxy-dns" >/dev/null; then
-    return 0
-  else
-    return 1
-  fi
+  pgrep -f "cloudflared proxy-dns" >/dev/null && return 0 || return 1
 }
 
 try_unbound() {
   command -v unbound >/dev/null 2>&1 || return 1
-
   mkdir -p ~/.unbound
   cat > ~/.unbound/unbound.conf <<'EOF'
 server:
@@ -426,14 +473,12 @@ server:
     logfile: "/dev/null"
     cache-min-ttl: 300
     cache-max-ttl: 3600
-
 forward-zone:
     name: "."
     forward-tls-upstream: yes
     forward-addr: 1.1.1.1@853#cloudflare-dns.com
     forward-addr: 1.0.0.1@853#cloudflare-dns.com
 EOF
-
   pkill -f "unbound" 2>/dev/null
   sleep 1
   {
@@ -441,30 +486,28 @@ EOF
   } 2>/dev/null
   disown 2>/dev/null
   sleep 3
-
-  if pgrep -f "unbound" >/dev/null; then
-    return 0
-  else
-    return 1
-  fi
+  pgrep -f "unbound" >/dev/null && return 0 || return 1
 }
 
 if try_cloudflared; then
   IS_SAFE=true
-  echo -e "${GREEN}[✓] cloudflared proxy-dns نشط (DoH عبر Cloudflare).${NC}"
+  echo -e "${GREEN}[✓] cloudflared proxy-dns aktif / نشط (DoH via Cloudflare).${NC}"
   echo "nameserver 127.0.0.1#5053" > "$DNS_FILE"
 else
   if try_unbound; then
     IS_SAFE=true
-    echo -e "${GREEN}[✓] Unbound نشط (DoT عبر Cloudflare).${NC}"
+    echo -e "${GREEN}[✓] Unbound aktif / نشط (DoT via Cloudflare).${NC}"
     echo "nameserver 127.0.0.1#5353" > "$DNS_FILE"
   else
-    echo -e "${RED}[✗] فشلت جميع طرق DNS المشفرة. الرجوع إلى AdGuard DNS.${NC}"
+    echo -e "${RED}[✗] Semua metode DNS gagal / فشلت جميع طرق DNS. Fallback ke AdGuard.${NC}"
     echo "nameserver 94.140.14.14" > "$DNS_FILE"
     echo "nameserver 94.140.15.15" >> "$DNS_FILE"
   fi
 fi
 
+# ============================================
+#  BLOKIR DOMAIN / حظر النطاقات
+# ============================================
 BLOCK_FILE="$PREFIX/etc/hosts"
 BLOCK_TAG="# === Custom BlockList Start ==="
 BLOCK_END="# === Custom BlockList End ==="
@@ -489,8 +532,11 @@ fi
   echo "$BLOCK_END"
 } >> "$BLOCK_FILE"
 
-echo -e "${GREEN}[✓] تم تطبيق حظر نطاقات الإعلانات/البرمجيات الخبيثة.${NC}"
+echo -e "${GREEN}[✓] Blokir domain iklan/malware diterapkan / تم تطبيق حظر الإعلانات والبرمجيات الخبيثة.${NC}"
 
+# ============================================
+#  GREEN TUNNEL (ANTI-DPI)
+# ============================================
 SAFETY_STATUS="${RED}False${NC}"
 [ "$IS_SAFE" = true ] && SAFETY_STATUS="${GREEN}True${NC}"
 
@@ -500,9 +546,12 @@ if command -v gt >/dev/null 2>&1; then
     gt --dns doh --no-system-proxy --log-level error >/dev/null 2>&1 &
   } 2>/dev/null
   disown 2>/dev/null
-  echo -e "${GREEN}[✓] GreenTunnel يعمل على المنفذ 8000 (بروكسي).${NC}"
+  echo -e "${GREEN}[✓] GreenTunnel berjalan di port 8000 / يعمل على المنفذ 8000.${NC}"
 fi
 
+# ============================================
+#  INFORMASI SISTEM / معلومات النظام
+# ============================================
 OS=$(uname -o)
 HOST="$(getprop ro.product.manufacturer 2>/dev/null) $(getprop ro.product.model 2>/dev/null)"
 KERNEL=$(uname -r)
@@ -543,22 +592,25 @@ if [[ -z "$MAC_ADDR" ]]; then
 fi
 MAC_ADDR=${MAC_ADDR:-N/A}
 
-echo -e "${CYAN}النظام      : $OS${NC}"
-echo -e "${CYAN}الجهاز      : $HOST${NC}"
-echo -e "${CYAN}النواة      : $KERNEL${NC}"
-echo -e "${CYAN}مدة التشغيل : $UPTIME${NC}"
-echo -e "${CYAN}الحزم       : $PACKAGES حزمة${NC}"
-echo -e "${CYAN}الصدفة      : $SHELL_NAME${NC}"
-echo -e "${CYAN}عنوان IP    : $IP_ADDR${NC}"
-echo -e "${CYAN}عنوان MAC   : $MAC_ADDR${NC}"
-echo -e "${CYAN}ذاكرة RAM   : $MEM_INFO${NC}"
-echo -e "${CYAN}التخزين     : $STORAGE_INFO  <($PERCENTAGE)>${NC}"
-echo -e "${CYAN}الشبكة الآمنة: $SAFETY_STATUS${NC}"
-echo -e "${CYAN}عدم الاتصال الوهمي: $FAKE_OFFLINE_STATUS${NC}"
+echo -e "${CYAN}OS / النظام      : $OS${NC}"
+echo -e "${CYAN}Host / الجهاز   : $HOST${NC}"
+echo -e "${CYAN}Kernel / النواة : $KERNEL${NC}"
+echo -e "${CYAN}Uptime / مدة التشغيل : $UPTIME${NC}"
+echo -e "${CYAN}Packages / الحزم: $PACKAGES pkg${NC}"
+echo -e "${CYAN}Shell / الصدفة  : $SHELL_NAME${NC}"
+echo -e "${CYAN}IP Address / عنوان IP : $IP_ADDR${NC}"
+echo -e "${CYAN}MAC Address / عنوان MAC: $MAC_ADDR${NC}"
+echo -e "${CYAN}Memory RAM / الذاكرة: $MEM_INFO${NC}"
+echo -e "${CYAN}Storage / التخزين: $STORAGE_INFO  <($PERCENTAGE)>${NC}"
+echo -e "${CYAN}Safe Net / الشبكة الآمنة: $SAFETY_STATUS${NC}"
+echo -e "${CYAN}Fake Offline / الإنترنت الوهمي: $FAKE_OFFLINE_STATUS${NC}"
 
 if pgrep -f "gt" >/dev/null 2>&1; then
-  echo -e "${CYAN}مكافحة DPI  : ${GREEN}نشط (GreenTunnel)${NC}"
+  echo -e "${CYAN}Anti-DPI / مكافحة DPI: ${GREEN}Aktif / نشط (GreenTunnel)${NC}"
 fi
 echo ""
 
+# ============================================
+#  PROMPT / موجه الأوامر
+# ============================================
 export PS1="${GREEN}┌─[مجهول 💀 @User]─[\A]\n${CYAN}└─[🔥 \w] ➤ ${NC}"
